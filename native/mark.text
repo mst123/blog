@@ -1,0 +1,2 @@
+nodemon 自动监测文件变化，自动重启服务
+cross-env 兼容mac window lunix运行环境
