@@ -1,5 +1,15 @@
 const { getList, getDetail, newBlog, updateBlog, delBlog } = require('../controller/blog')
 const { SuccessModel, ErrorModel } = require('../model/resModel')
+
+//统一的登陆验证函数
+const loginCheck = (req) => {
+  if(!req.session.username){
+    return Promise.resolve(
+      new ErrorModel('尚未登陆')
+    )
+  }
+}
+
 const handleBlogRoueter = (req, res) => {
   const method = req.method
   //获取博客列表
@@ -27,14 +37,29 @@ const handleBlogRoueter = (req, res) => {
   }
   //新建博客地址
   if(method == 'POST' && req.path=='/api/blog/new'){
-    const author = 'zhangsan'
-    req.body.author = author
+
+    //登陆验证
+    const loginCheckResult = loginCheck(req)
+    if(loginCheckResult){
+      //未登录
+      return loginCheckResult
+    }
+
+    req.body.author = req.session.username
     return newBlog(req.body).then((data) => {
       return new SuccessModel(data)
     })
   }
   //更新博客地址
   if(method == 'POST' && req.path=='/api/blog/update'){
+
+    //登陆验证
+    const loginCheckResult = loginCheck(req)
+    if(loginCheckResult){
+      //未登录
+      return loginCheckResult
+    }
+
     const id = 1
     return updateBlog(id, req.body).then((val) => {
       if(val){
@@ -47,7 +72,14 @@ const handleBlogRoueter = (req, res) => {
   }
   //删除博客地址
   if(method == 'POST' && req.path=='/api/blog/delete'){ 
-    req.body.author = 'zhangsan' //两层判断，防止 误/恶意 删除别人的微博
+    
+    //登陆验证
+    const loginCheckResult = loginCheck(req)
+    if(loginCheckResult){
+      //未登录
+      return loginCheckResult
+    }
+    req.body.author = req.session.username //两层判断，防止 误/恶意 删除别人的微博
     return delBlog(req.body.id, req.body.author).then((val) => {
       if(val){
         return new SuccessModel()

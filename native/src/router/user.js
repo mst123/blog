@@ -4,25 +4,14 @@ const { SuccessModel, ErrorModel } = require('../model/resModel')
 const handleUserRoueter = (req, res) => {
   const method = req.method
   //登陆
-  /* if(method == 'POST' && req.path=='/api/user/login'){
+  if(method == 'POST' && req.path=='/api/user/login'){
     const { username, password } = req.body
-    return login(username, password).then(data => {
-      if(data.username){
-        return new SuccessModel()
-      }else{
-        return new ErrorModel('登陆失败')
-      }
-    })
-  } */
-  if(method == 'GET' && req.path=='/api/user/login'){
-    const { username, password } = req.query
     return login(username, password).then(data => {
       if(data.username){
         // 设置 session
         req.session.username = data.username
         req.session.realname = data.realname
-        console.log('req.session ');
-        console.log(req.session);
+
         return new SuccessModel({
           username: data.username
         })
@@ -31,6 +20,7 @@ const handleUserRoueter = (req, res) => {
       }
     })
   }
+
   //登陆验证的测试
   if(method == 'GET' && req.path == '/api/user/login-test'){
     console.log(req.cookie);
