@@ -1,7 +1,14 @@
 <template>
   <div class="home">
-    博客首页
-
+    作者详情
+    <el-form :inline="true" class="demo-form-inline">
+      <el-form-item label="关键字">
+        <el-input v-model="keyword" placeholder="关键字"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="onSearch">查询</el-button>
+      </el-form-item>
+    </el-form>
     <el-table
       :data="tableData"
       style="width: 100%">
@@ -11,22 +18,13 @@
             @click.native.prevent="viewBlog(scope.row)"
             type="text"
             size="small">
-            {{scope.row.title}}
+            {{scope.row.author}}
           </el-button>
         </template>
       </el-table-column>
       <el-table-column prop="content" label="内容" width="180"></el-table-column>
       <el-table-column prop="createtime" label="发布时间"></el-table-column>
-      <el-table-column prop="author" label="作者">
-        <template slot-scope="scope">
-          <el-button
-            @click.native.prevent="viewBlogByAuthor(scope.row)"
-            type="text"
-            size="small">
-            {{scope.row.author}}
-          </el-button>
-        </template>
-      </el-table-column>
+      <el-table-column prop="author" label="作者"></el-table-column>
     </el-table>
   </div>
 </template>
@@ -38,7 +36,9 @@ export default {
   name: 'home',
   data() {
     return {
-      tableData:[]
+      tableData:[],
+      author: '',
+      keyword: ''
     }
   },
   components: {
@@ -47,8 +47,10 @@ export default {
   methods: {
     tableInit(){
       this.axios.get('/api/blog/list', {
-        author: '',
-        keyword: ''
+        params:{
+          author: this.author,
+          keyword: this.keyword
+        }
       })
       .then( (res) => {
         console.log(res);
@@ -60,20 +62,15 @@ export default {
         console.log(error);
       });
     },
-    viewBlogByAuthor(row){
-      console.log(row);
-      this.$router.push({
-        path:"/author",
-        query: {
-          author: row.author
-        }
-      })
+    onSearch(){
+      this.tableInit()
     },
     viewBlog(row){
       console.log(row);
     }
   },
   mounted() {
+    this.author = this.$route.query.author
     this.tableInit()
   },
 }

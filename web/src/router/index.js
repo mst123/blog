@@ -11,11 +11,30 @@ const routes = [
     component: Home
   },
   {
-    path: '/about',
-    name: 'about',
-
-    component: () => import('../views/About.vue')
-  }
+    path: '/blogDetail',
+    name: 'blogDetail',
+    component: () => import('../views/detail.vue')
+  },
+  {
+    path: '/author',
+    name: 'author',
+    component: () => import('../views/author.vue')
+  },
+  {
+    path: '/blogManage',
+    name: 'blogManage',
+    component: () => import('../views/blogManage.vue')
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: () => import('../views/login.vue')
+  },
+  {
+    path: '/editBlog',
+    name: 'editBlog',
+    component: () => import('../views/editBlog.vue')
+  },
 ]
 
 const router = new VueRouter({

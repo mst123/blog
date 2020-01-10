@@ -14,7 +14,19 @@ const handleBlogRoueter = (req, res) => {
   const method = req.method
   //获取博客列表
   if(method == 'GET' && req.path=='/api/blog/list'){
-    const author = req.query.author || ''
+    let author
+    if(req.query.isadmin){ //获取自己的博客
+      //登陆验证
+      const loginCheckResult = loginCheck(req)
+      if(loginCheckResult){
+        //未登录
+        return loginCheckResult
+      }
+      author = req.session.username
+    }else{
+      author = req.query.author || ''
+    }
+    
     const keyword = req.query.keyword || ''
     const result = getList(author, keyword)
     return result.then(listData => {  //promise.then() 也是一个promise
@@ -59,9 +71,7 @@ const handleBlogRoueter = (req, res) => {
       //未登录
       return loginCheckResult
     }
-
-    const id = 1
-    return updateBlog(id, req.body).then((val) => {
+    return updateBlog(req.body).then((val) => {
       if(val){
         return new SuccessModel()
       }else{

@@ -34,6 +34,11 @@ if (env == 'dev') {
 		host: '127.0.0.1'
 	}
 }
+//调试使用
+REDIS_CONF = {
+	port: 6379,
+	host: '127.0.0.1'
+}
 MYSQL_CONF = {
 	host: 'localhost',
 	user: 'root',

@@ -6,6 +6,8 @@ import Element from 'element-ui'
 import axios from 'axios'
 import 'element-ui/lib/theme-chalk/index.css'
 Vue.use(Element)
+axios.defaults.baseURL = 'http://localhost:8080';
+
 Vue.config.productionTip = false
 Vue.prototype.axios = axios
 new Vue({
@@ -13,3 +15,4 @@ new Vue({
   store,
   render: h => h(App)
 }).$mount('#app')
+

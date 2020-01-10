@@ -1,11 +1,35 @@
 const querystring = require('querystring')
 const handleUserRounter = require('./src/router/user')
 const handleBlogRounter = require('./src/router/blog')
-
+const {set, get} = require('./src/db/redis')
 //定义 服务端session
-const SESSION_DATA = {}
+set('SESSION_DATA',{})
+//工具-------用于处理 post data
+const getPostData = (req) => {  
+  return new Promise((resolve, reject) => {
+    if(req.mehhod == 'GET'){
+      resolve({})
+      return
+    }
+    /* if(req.headers['content-type'] != 'application/json'){
+      resolve({})
+      return
+    } */
+    let postData = ''
+    req.on('data', chunk => {
+      postData += chunk.toString() //二进制转字符串
+    })
+    req.on('end', () => {
+      if(!postData){
+        resolve({})
+      }else{
+        resolve(JSON.parse(postData))
+      }    
+    })
+  })
+}
 
-const serverHandle = (req, res) => {
+const serverHandle = async (req, res) => {
   res.setHeader('Content-type', 'application/json') //业界规范。。。
   req.path = req.url.split('?')[0]
 
@@ -17,22 +41,27 @@ const serverHandle = (req, res) => {
       req.cookie[item.split('=')[0]] = item.split('=')[1] 
     }
   });
-  console.log(req.cookie);
-
   //解析session
   let needSetCookie = false
   let userId = req.cookie.userId //sessionId 
+  let SESSION_DATA = await get('SESSION_DATA')
   if(userId){  
     if(!SESSION_DATA[userId]){ //有sessionId  但是session中没有用户记录
-      SESSION_DATA[userId] = {}
+      let data ={}
+      data[userId] = {}
+      set('SESSION_DATA', data)
     }
   }else{  //没有sessionId 需要生成sessionId，并记录在cookie中
     needSetCookie = true
+    let data ={}
     userId = Date.now() + '_' + Math.random() 
-    SESSION_DATA[userId] = {}
+    data[userId] = {}
+    set('SESSION_DATA', data)
   }
-  req.session = SESSION_DATA[userId] //将session中记录的用户信息，放置在req中，以便后续使用
-
+  SESSION_DATA = await get('SESSION_DATA')
+  req.session = SESSION_DATA[userId] //将session中记录的用户信息，放置在req中，以便后续使用 
+  console.log(req.session);
+  
   //处理get请求参数
   req.query = querystring.parse(req.url.split('?')[1])
 
@@ -83,31 +112,7 @@ const serverHandle = (req, res) => {
 const getCookieExpires = () => {
   const d = new Date()
   d.setTime(d.getTime() + (24*60*60*1000))
-  console.log(d.toGMTString());
   return d.toGMTString()  //cookie的时间格式
 }
-//工具-------用于处理 post data
-const getPostData = (req) => {
-  return new Promise((resolve, reject) => {
-    if(req.mehhod == 'GET'){
-      resolve({})
-      return
-    }
-    if(req.headers['content-type'] != 'application/json'){
-      resolve({})
-      return
-    }
-    let postData = ''
-    req.on('data', chunk => {
-      postData += chunk.toString() //二进制转字符串
-    })
-    req.on('end', () => {
-      if(!postData){
-        resolve({})
-      }else{
-        resolve(JSON.parse(postData))
-      }    
-    })
-  })
-}
+
 module.exports = serverHandle
