@@ -1,15 +1,6 @@
 const { getList, getDetail, newBlog, updateBlog, delBlog } = require('../controller/blog')
 const { SuccessModel, ErrorModel } = require('../model/resModel')
-
-//统一的登陆验证函数
-const loginCheck = (req) => {
-  if(!req.session.username){
-    return Promise.resolve(
-      new ErrorModel('尚未登陆')
-    )
-  }
-}
-
+const { loginCheck } = require('../../src/util/loginCheck')         //统一的登陆验证函数
 const handleBlogRoueter = (req, res) => {
   const method = req.method
   //获取博客列表

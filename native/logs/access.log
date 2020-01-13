@@ -19,3 +19,7 @@ GET -- /api/blog/list -- Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:71.0) Geck
 GET -- /api/blog/list?author=zhangsan&keyword= -- Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:71.0) Gecko/20100101 Firefox/71.0 -- 1578895234404
 POST -- /api/user/login -- Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36 -- 1578904752851
 GET -- /api/blog/list -- Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36 -- 1578904752904
+GET -- /api/blog/list?isadmin=1 -- Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36 -- 1578907414181
+GET -- /api/blog/list?isadmin=1 -- Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36 -- 1578907439700
+GET -- /api/blog/list -- Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36 -- 1578907470418
+GET -- /api/blog/list?isadmin=1 -- Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36 -- 1578907473099
