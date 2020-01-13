@@ -1,4 +1,5 @@
 const { exec } = require('../db/mysql')
+const xss = require('xss')  //防止前端XSS攻击,主要功能是转义特殊字符，无法形成代码块
 const getList = (author, keyword) => {
   let sql = `select * from blogs where 1=1 ` //注意后面都有空格
   //1=1 永远成立  为了防止where后边没有查询条件。
@@ -19,6 +20,7 @@ const getDetail = (id) => {
 }
 const newBlog = (blogData = {}) => {
   const {title, content, author} = blogData
+  // const title = xss(blogData.title) //预防XSS攻击
   const createtime = Date.now()
   const sql = `
     insert into blogs (title, content, createtime, author)

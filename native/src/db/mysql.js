@@ -19,5 +19,6 @@ function exec(sql) {
 }
 //不关闭 con.end()
 module.exports = {
-  exec
+  exec,
+  escape: mysql.escape //防止sql注入攻击
 }

@@ -2,6 +2,7 @@ const querystring = require('querystring')
 const handleUserRounter = require('./src/router/user')
 const handleBlogRounter = require('./src/router/blog')
 const {set, get} = require('./src/db/redis')
+const { access } = require('./src/util/log')
 //定义 服务端session
 set('SESSION_DATA',{})
 //工具-------用于处理 post data
@@ -30,6 +31,10 @@ const getPostData = (req) => {
 }
 
 const serverHandle = async (req, res) => {
+  // 记录 access log
+  access(`${req.method} -- ${req.url} -- ${req.headers['user-agent']} -- ${Date.now()}`)
+
+
   res.setHeader('Content-type', 'application/json') //业界规范。。。
   req.path = req.url.split('?')[0]
 
