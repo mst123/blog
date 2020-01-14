@@ -17,7 +17,7 @@ function set(key, val){
 
 function get(key){
   return new Promise((resolve, reject) => {
-    redisClient.get(key, (err, val) => {
+    redisClient.get(key, (err, val) => { //是一个异步函数
       if(err){
         reject(err)
       }else{

@@ -1,12 +1,12 @@
 const { getList, getDetail, newBlog, updateBlog, delBlog } = require('../controller/blog')
-const { SuccessModel, ErrorModel } = require('../model/resModel')
-const { loginCheck } = require('../../src/util/loginCheck')         //统一的登陆验证函数
+const { SuccessModel, ErrorModel } = require('../model/resModel')        //封装的信息体
+const { loginCheck } = require('../../src/util/loginCheck')              //统一的登陆验证函数
 const handleBlogRoueter = (req, res) => {
   const method = req.method
-  //获取博客列表
+  //根据作者和关键字 获取博客列表
   if(method == 'GET' && req.path=='/api/blog/list'){
     let author
-    if(req.query.isadmin){ //获取自己的博客
+    if(req.query.isadmin){ //管理自己的博客
       //登陆验证
       const loginCheckResult = loginCheck(req)
       if(loginCheckResult){
@@ -16,18 +16,14 @@ const handleBlogRoueter = (req, res) => {
       author = req.session.username
     }else{
       author = req.query.author || ''
-    }
-    
+    }    
     const keyword = req.query.keyword || ''
-    const result = getList(author, keyword)
-    return result.then(listData => {  //promise.then() 也是一个promise
-      console.log('第二层接收到结果');
-      return new SuccessModel(listData) //第一个回调函数完成以后，会将返回结果作为参数，传入第二个回调函数
+    return getList(author, keyword).then(listData => {  //promise.then() 也是一个promise
+      return new SuccessModel(listData) //第一个回调函数完成以后，会将返回return结果作为参数，传入第二个回调函数
       // resolve(new SuccessModel(listData))   //不可以使用
     },(error) => {
-      console.log('第二层接收到错误');
       // reject(new ErrorModel(error))    //不可以使用
-      return new ErrorModel(error)
+      return new ErrorModel(error)      //第一个回调函数完成以后，会将返回return结果作为参数，传入第二个回调函数
     })
   }
   //获取博客详情
@@ -36,8 +32,8 @@ const handleBlogRoueter = (req, res) => {
     return getDetail(id).then((data) => {
       return new SuccessModel(data)
     })
-    
   }
+  
   //新建博客地址
   if(method == 'POST' && req.path=='/api/blog/new'){
 
