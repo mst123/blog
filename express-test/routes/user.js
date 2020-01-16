@@ -24,14 +24,4 @@ router.post('/login', (req, res, next) => {
   })
 });
 
-router.get('/login-test', (req, res, next) => {
-  if(req.session.username) {
-    res.json(req.session)
-  }else{
-    res.json({
-      msg: '登录失败'
-    })
-  }
-})
-
 module.exports = router;

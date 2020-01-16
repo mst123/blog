@@ -26,7 +26,7 @@ app.use(express.urlencoded({ extended: false })); //兼容post content-type appl
 app.use(cookieParser());   //解析cookie
 // app.use(express.static(path.join(__dirname, 'public  '))); //前端部分，不需要
 
-// 配置cookie和session
+// 配置cookie、session和redis
 const sessionStore = new RedisStore({
   client: redisClient
 })
