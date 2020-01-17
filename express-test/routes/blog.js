@@ -10,9 +10,11 @@ router.get('/list', (req, res, next) => {
   let author = req.query.author || ''
   let keyword = req.query.keyword || ''
   if(req.query.isadmin){ //博客管理页面
+    console.log('isadmin');
+    
     if(!req.session.username){
       //未登录
-      res.json( //没有结束程序的功能
+      res.json( //没有结束程序的功能 
         new ErrorModel('未登录')
       )
       return
@@ -29,7 +31,6 @@ router.get('/list', (req, res, next) => {
       new ErrorModel(error)
     )
   })
-  console.log(req.session);
   /* Session {
     cookie: {
       path: '/',
