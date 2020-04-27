@@ -1,3 +1,10 @@
+/**
+ * @Descripttion : 
+ * @Author       : 马识途
+ * @Date         : 2020-01-15 10:54:50
+ * @LastEditTime : 2020-04-21 15:04:21
+ * @FilePath     : \projecte:\codeFile\blog\express-middleware\app.js
+*/
 const express = require('express')
 
 // 本次 http 请求的实例
@@ -75,6 +82,6 @@ app.use( (req, res, next) => {
   })
 })
 
-app.listen(3000, () => {
-  console.log('server is running on http://localhost:3000');
+app.listen(4000, () => {
+  console.log('server is running on http://localhost:4000');
 })
